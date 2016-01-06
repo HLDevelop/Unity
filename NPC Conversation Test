@@ -1,0 +1,60 @@
+using UnityEngine;
+using System.Collections;
+
+public class NPC : MonoBehaviour {
+	
+	public Transform target;
+	public float interactDistance = 3.0f;
+	public GameObject textDialog;
+	public float distance;
+	
+	// Use this for initialization
+	void Start () {
+		//check for player target
+		if (target == null) {
+			
+			if (GameObject.FindWithTag ("Player")!=null)
+			{
+				target = GameObject.FindWithTag ("Player").GetComponent<Transform>();
+			}
+		}
+		//set text to hidden
+		if (textDialog) {
+			textDialog.SetActive (false);
+		}
+			
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		//Testing: Check for target
+		if (target == null) {
+			Debug.Log("No Target");
+			return;
+		}
+		//Check the distance between the player and NPC
+		distance = Vector3.Distance (transform.position, target.position);
+		if(distance < interactDistance)	
+			//if within the interaction distance and if e has been pressed:
+		if (Input.GetKey (KeyCode.E)) {
+			Debug.Log("Pressing E");
+			//Show Text
+				if(textDialog){
+				Debug.Log("Should WORK");
+				textDialog.SetActive(true);
+				target.GetComponent<Move>().movement = false;
+			}
+		}
+		//Close Text and Enable Walking
+		if (Input.GetKey (KeyCode.Escape)){
+			Debug.Log("Should Close All and Walk");
+			textDialog.SetActive(false);
+			target.GetComponent<Move>().movement = true;
+		}
+		//Enable walking without closing text
+		if (Input.GetKey (KeyCode.Space)){
+			Debug.Log("Should Walk");
+			target.GetComponent<Move>().movement = true;
+		}
+	}
+}
