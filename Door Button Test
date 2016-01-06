@@ -1,0 +1,41 @@
+using UnityEngine;
+using System.Collections; 
+
+public class Button : MonoBehaviour {
+
+	public Transform target;
+	public float interactDistance = 3.0f;
+	public float distance;
+	private DoorMode doorController;
+
+	// Use this for initialization
+	void Start () {
+		//check for player target
+		if (target == null) {
+			
+			if (GameObject.FindWithTag ("Player") != null) {
+				target = GameObject.FindWithTag ("Player").GetComponent<Transform> ();
+			}
+		}
+		//set door button game object
+		doorController = GameObject.FindObjectOfType<DoorMode> ();
+	}
+
+	// Update is called once per frame
+	void Update () {
+		//Testing: Check for target
+		if (target == null) {
+				Debug.Log("No Target");
+			return;
+		}
+		//Check the distance between the player and NPC
+		distance = Vector3.Distance (transform.position, target.position);
+		if(distance < interactDistance){
+			//if within the interaction distance and if e has been pressed:
+			if ( Input.GetKeyDown (KeyCode.E)) {
+				Debug.Log("Pressing E");
+					doorController.OpenDoor();
+				}
+			}
+		}
+	}
