@@ -1,0 +1,36 @@
+using UnityEngine;
+using System.Collections;
+
+public class Victory : MonoBehaviour {
+
+	public bool collect = false;
+	public GameObject anim;
+	public string victoryLevel;
+
+	void Awake(){
+		if (victoryLevel=="") {
+			Debug.LogWarning("Default Level Loaded");
+			victoryLevel = Application.loadedLevelName;
+		}
+	}
+
+	void OnTriggerEnter2D (Collider2D other)
+	{
+		if ((other.tag == "Player" ) && (!collect))
+		{
+			collect=true;
+			if (anim)
+			{
+				Instantiate(anim,transform.position,transform.rotation);
+			}
+			StartCoroutine(LoadNextLevel());
+			DestroyObject(this.gameObject);
+		}
+	}
+
+	IEnumerator LoadNextLevel() {
+		Debug.LogWarning("load level");
+		Application.LoadLevel (victoryLevel);
+		yield return new WaitForSeconds(0.5f);
+	}
+}
